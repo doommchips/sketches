@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #222;
+    display: block;
+    color: #FFF;
+    font-family: "Andale Mono";
+
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+#translation {
+    text-align: center;
+
+    position: absolute;
+    top: calc(50% - 20px);
+    left: 20%;
+    right: 20%;
+}
