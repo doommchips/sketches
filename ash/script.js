@@ -14,5 +14,5 @@ window.onload = function() {
 }
 
 function drawAll() {
-
+  console.log('test');
 }
