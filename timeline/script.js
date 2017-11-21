@@ -1,8 +1,33 @@
+// var grammar = '#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;'
+var recognition = new webkitSpeechRecognition();
+var speechRecognitionList = new webkitSpeechGrammarList();
+// speechRecognitionList.addFromString(grammar, 1);
+recognition.grammars = speechRecognitionList;
+//recognition.continuous = false;
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+var diagnostic = document.querySelector('.output');
+var bg = document.querySelector('html');
+
 $(document).ready(function() {
+    recognition.start();
     var canvas = $('#canvas')[0];
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     var slideState = 1;
+    var recite = [
+        '',
+        'and also with you',
+        'I seek forgiveness',
+        'the body and the blood',
+        'move in me Holy Internet',
+        'thanks be to the Computer',
+        'amen'
+    ];
+
+    showRecital()
 
     if(canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -92,6 +117,7 @@ $(document).ready(function() {
         document.onclick = function() {
 
             document.getElementById('slide-' + slideState).classList.add('hidden');
+            document.getElementById('answer').classList.add('hidden');
 
             if (slideState < 6) {
                 slideState++;
@@ -99,9 +125,40 @@ $(document).ready(function() {
                 slideState = 1;
             }
 
+            showRecital()
+
             document.getElementById('slide-' + slideState).classList.remove('hidden');
-            console.log(slideState);
+            document.getElementById('answer').innerHTML = recite[slideState];
+            // console.log(slideState);
         };
 
     }
+
+    function showRecital() {
+        setTimeout(function(){
+            document.getElementById('answer').classList.remove('hidden');
+        }, 7000);
+    }
+
+    console.log(recite[slideState]);
+
+    recognition.onresult = function(event) {
+        var recital = event.results[0][0].transcript;
+        var match = recital.match(new RegExp(recite[slideState], 'i'));
+        console.log(recital);
+
+        if (match) {
+            // console.log(match);
+            $(document).click();
+        }
+    }
+
+    recognition.onend = function() {
+        console.log('Confession service disconnected');
+        recognition.start();
+        // seems dangerous
+    }
+
+
+
 });
