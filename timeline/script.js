@@ -28,6 +28,7 @@ $(document).ready(function() {
     ];
 
     showRecital()
+    setTimeout(function(){ document.getElementById('audio-' + slideState).play(); }, 2000);
 
     if(canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -128,6 +129,7 @@ $(document).ready(function() {
             showRecital()
 
             document.getElementById('slide-' + slideState).classList.remove('hidden');
+            setTimeout(function(){ document.getElementById('audio-' + slideState).play(); }, 2000);
             document.getElementById('answer').innerHTML = recite[slideState];
             // console.log(slideState);
         };
