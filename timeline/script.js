@@ -17,18 +17,111 @@ $(document).ready(function() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     var slideState = 1;
-    var recite = [
-        '',
+    var recite_1 = [
         'and also with you',
-        'I seek forgiveness',
-        'the body and the blood',
-        'move in me Holy Internet',
-        'thanks be to the Computer',
-        'amen'
+        'you'
     ];
+    var recite_2 = [
+        'I seek forgiveness',
+        'I',
+        'seek',
+        'forgiveness'
+    ];
+    var recite_3 = [
+        'the body and the blood',
+        'blood'
+    ];
+    var recite_4 = [
+        'move in me Holy Internet',
+        'Virgin Media',
+        'move',
+        'moving me',
+        'holy',
+        'internet'
+    ];
+    var recite_5 = [
+        'thanks be to the Computer',
+        'computer'
+    ];
+    var recite_6 = [
+        'amen',
+        'almere',
+        'Emma',
+        'honour'
+    ];
+    var reciteCurrent = recite_1;
+
+    function showRecital() {
+        setTimeout(function(){
+            document.getElementById('answer').classList.remove('hidden');
+        }, 7000);
+    }
+
+    console.log(recite_1[0]);
+
+    recognition.onresult = function(event) {
+        var recital = event.results[0][0].transcript;
+        console.log(recital);
+
+
+        for (a = 0; a < 6; a++) {
+            var match = recital.match(new RegExp(reciteCurrent[a], 'i'));
+            // console.log(match);
+        }
+
+        if (match) {
+            console.log(match);
+            $(document).click();
+        }
+    }
 
     showRecital()
-    setTimeout(function(){ document.getElementById('audio-' + slideState).play(); }, 2000);
+    setTimeout(function(){
+        // document.getElementById('audio-' + slideState-1).stop();
+        document.getElementById('audio-' + slideState).play();
+    }, 2000);
+
+    document.onclick = function() {
+
+        document.getElementById('slide-' + slideState).classList.add('hidden');
+        document.getElementById('answer').classList.add('hidden');
+
+        if (slideState < 6) {
+            slideState++;
+            if (slideState == 2) {
+                reciteCurrent = recite_2;
+            }
+            if (slideState == 3) {
+                reciteCurrent = recite_3;
+            }
+            if (slideState == 4) {
+                reciteCurrent = recite_4;
+            }
+            if (slideState == 5) {
+                reciteCurrent = recite_5;
+            }
+            if (slideState == 6) {
+                reciteCurrent = recite_6;
+            }
+
+        } else {
+            slideState = 1;
+            reciteCurrent = recite_1;
+        }
+
+        showRecital()
+
+        document.getElementById('slide-' + slideState).classList.remove('hidden');
+        setTimeout(function(){ document.getElementById('audio-' + slideState).play(); }, 2000);
+        document.getElementById('answer').innerHTML = reciteCurrent[0];
+        // console.log(slideState);
+    };
+
+    recognition.onend = function() {
+        console.log('Confession service disconnected');
+        recognition.start();
+        // seems dangerous
+    }
 
     if(canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -115,50 +208,6 @@ $(document).ready(function() {
 
         setInterval(draw, 1);
 
-        document.onclick = function() {
-
-            document.getElementById('slide-' + slideState).classList.add('hidden');
-            document.getElementById('answer').classList.add('hidden');
-
-            if (slideState < 6) {
-                slideState++;
-            } else {
-                slideState = 1;
-            }
-
-            showRecital()
-
-            document.getElementById('slide-' + slideState).classList.remove('hidden');
-            setTimeout(function(){ document.getElementById('audio-' + slideState).play(); }, 2000);
-            document.getElementById('answer').innerHTML = recite[slideState];
-            // console.log(slideState);
-        };
-
-    }
-
-    function showRecital() {
-        setTimeout(function(){
-            document.getElementById('answer').classList.remove('hidden');
-        }, 7000);
-    }
-
-    console.log(recite[slideState]);
-
-    recognition.onresult = function(event) {
-        var recital = event.results[0][0].transcript;
-        var match = recital.match(new RegExp(recite[slideState], 'i'));
-        console.log(recital);
-
-        if (match) {
-            // console.log(match);
-            $(document).click();
-        }
-    }
-
-    recognition.onend = function() {
-        console.log('Confession service disconnected');
-        recognition.start();
-        // seems dangerous
     }
 
 
