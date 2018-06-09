@@ -1,14 +1,23 @@
 body {
     background: #1E1E1E;
     color: #FFF;
-    font-family: "PT Mono";
+    font-family: "PT Mono", monospace;
     font-size: 16px;
     line-height: 24px;
     text-align: left;
 }
 
+/* Portrait and Landscape */
+@media only screen
+    and (min-device-width: 414px)
+    and (max-device-width: 736px)
+    and (-webkit-min-device-pixel-ratio: 3) {
+        body {
+            font-size: 24px;
+        }
+}
+
 p {
-    /* color: #f44d6b; */
     display: block;
     margin: 0 0 4px 240px;
     padding: 0;
