@@ -4,6 +4,7 @@ A haiku composer using the [Wikipedia](https://en.wikipedia.org/wiki/Absolute_ze
 Accompanying the composer is a [Tumblr](https://zero-haiku.tumblr.com/) where you can read and submit to the collection of zero haiku.
 * [The composer can found here](https://doommchips.github.io/sketches/zero/)
 * [The collection can viewed here](https://zero-haiku.tumblr.com/)
+*Submissions for the collection will close after reaching a total of 273*
 
 ## What is haiku?
 
