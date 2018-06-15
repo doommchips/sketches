@@ -1,0 +1,91 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    /*background: #302C2B;*/
+    /*color: rgba(225, 224, 232, 1);*/
+    background: #416DC3;
+    background: url("bg.gif") no-repeat center center fixed;
+    background-size: cover;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: "PT Mono";
+    margin: 0;
+    overflow: hidden;
+    text-align: left;
+}
+
+p {
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0 0 8px;
+    width: 332px;
+    /*word-break: break-all;*/
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.slide {
+    user-select: none;
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    z-index: 1;
+}
+
+#slide-1 {
+    left: 16%;
+}
+#slide-2 {
+    left: 20%;
+}
+#slide-3 {
+    left: 24%;
+}
+#slide-4 {
+    left: 28%;
+}
+#slide-5 {
+    left: 32%;
+}
+#slide-6 {
+    left: 36%;
+}
+
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+
+#map {
+    background: url("map.png") no-repeat center center fixed;
+    background-size: contain;
+    display: block;
+    height: 68%;
+
+    position: absolute;
+    top: 16%;
+    left: 0;
+    right: 0;
+    z-index: 0;
+}
+
+#answer {
+    font-size: 36px;
+    text-align: center;
+    width: auto;
+    transition: opacity 1s ease-in-out;
+
+    position: absolute;
+    bottom: 16%;
+    left: 0;
+    right: 0;
+    z-index: 0;
+}

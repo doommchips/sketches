@@ -1,0 +1,79 @@
+body {
+    background: #1E1E1E;
+    color: #FFF;
+    font-family: "PT Mono", monospace;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: left;
+}
+
+/* Portrait and Landscape */
+@media only screen
+    and (min-device-width: 414px)
+    and (max-device-width: 736px)
+    and (-webkit-min-device-pixel-ratio: 3) {
+        body {
+            font-size: 24px;
+        }
+}
+
+p {
+    display: block;
+    margin: 0 0 4px 240px;
+    padding: 0;
+    position: relative;
+    top: 80px;
+    left: 0;
+}
+
+.title {
+    font-size: 64px;
+    line-height: 80px;
+    margin-bottom: 40px;
+}
+
+.btn {
+    background-color: #transparent;
+    color: #05F;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 16px 0 0;
+    padding: 8px 0;
+
+    position: relative;
+    top: 160px;
+    left: 240px;
+    transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+}
+
+.btn:hover {
+    color: #FFF;
+}
+
+.submit {
+    color: #05F;
+    text-decoration: none;
+}
+
+#tooltip {
+    display: inline-block;
+    padding: 8px 16px;
+    opacity: 1;
+    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+    visibility: visible;
+
+    position: relative;
+    top: 160px;
+    left: 240px;
+}
+
+#tooltip.hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+textarea {
+    position: absolute;
+    top: -5000px;
+    left: -5000px;
+}
