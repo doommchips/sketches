@@ -114,6 +114,7 @@ function writeHaiku() {
 window.onload = writeHaiku();
 
 btnNew.addEventListener("click", function( event ) {
+    copyText = "";
     text1.innerHTML = "";
     text2.innerHTML = "";
     text3.innerHTML = "";
