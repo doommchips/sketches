@@ -35,6 +35,7 @@ window.onload = function() {
 
     drawBlocks();
     drawLinePrelim();
+    view.click();
     var fps = 120;
     numSetTimer = setInterval(updateBlock, 1000/fps);
 }
@@ -137,12 +138,32 @@ function drawLine() {
     x2 = parseFloat(x2) + numBlockSize/2;
     y2 = parseFloat(y2) + numBlockSize/2;
 
-    if(getNum(3) < 2) {
+    var chance = getNum(6);
+    if(chance < 3) {
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
         console.log("move: " + x1 + "x -> " + x2 + "x, " + y1 + "y -> " + y2 + "y");
         // soundPing.play();
+    }
+    if(chance > 2 && chance < 4) {
+        // choose a point that has laready been used - to close a loop
+        var closePoint = getNum(blueSet.length);
+        var xClose = document.getElementById(blueSet[closePoint]).style.left;
+        var yClose = document.getElementById(blueSet[closePoint]).style.top;
+
+        // trim the last two char "px" from the co-ords
+        xClose = (xClose.slice(0, -2));
+        yClose = (yClose.slice(0, -2));
+
+        // adjust to center of point
+        xClose = parseFloat(xClose) + numBlockSize/2;
+        yClose = parseFloat(yClose) + numBlockSize/2;
+
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(xClose, yClose);
+        ctx.stroke();
+        console.log("close: " + x2 + "x -> " + xClose + "x, " + y2 + "y -> " + yClose + "y");
     }
     // else {
     //     ctx.lineTo(x1, y1);
