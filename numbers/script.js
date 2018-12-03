@@ -60,7 +60,7 @@ function updateBlock() {
         blockToUpdate = getNum(numSet.length); //chose random item in array to change
         var el = document.getElementById(numSet[blockToUpdate]);
 
-        if(getNum(96) < 1) {
+        if(getNum(128) < 1) {
             el.classList.add("bg-blue");
             blueSet.push(numSet[blockToUpdate]);
             if(blueSet.length > 1) {
@@ -139,14 +139,14 @@ function drawLine() {
     y2 = parseFloat(y2) + numBlockSize/2;
 
     var chance = getNum(6);
-    if(chance < 3) {
+    if(chance < 4) {
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
         console.log("move: " + x1 + "x -> " + x2 + "x, " + y1 + "y -> " + y2 + "y");
         // soundPing.play();
     }
-    if(chance > 2 && chance < 4) {
+    if(chance > 3 ) {
         // choose a point that has laready been used - to close a loop
         var closePoint = getNum(blueSet.length);
         var xClose = document.getElementById(blueSet[closePoint]).style.left;
