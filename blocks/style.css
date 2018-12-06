@@ -27,7 +27,7 @@ img {
 }
 
 canvas {
-    background-color: #FFFFFF;
+    background-color: #111111;
     position: absolute;
     z-index: 1
 }
