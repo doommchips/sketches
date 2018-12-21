@@ -1,9 +1,5 @@
 html {
-    /* background-color: blue; */
-    background-color: #97d07b;
     box-sizing: border-box;
-    /* color: rgba(0, 255, 0, 1); */
-    color: #020d12;
     font-family: ocr-a-std, monospace;
     font-weight: 400;
     font-style: normal;
@@ -21,6 +17,17 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
     margin: 0;
     padding: 0;
     text-align: left;
+}
+
+body {
+    /* background-color: blue; */
+    background-color: #97d07b;
+    /* color: rgba(0, 255, 0, 1); */
+    color: #020d12;
+
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
 ol, ul {
@@ -73,8 +80,10 @@ canvas {
     animation: blinking 1s infinite;
 }
 
-.colour-red {
-    color: red;
+#short-p {
+    position: absolute;
+    left: 24px;
+    top: 24px;
 }
 
 @keyframes blinking {

@@ -1,7 +1,9 @@
 var view, viewCtx, noise, noiseCtx, fps, viewW, viewH, noiseUnit, noiseW,
     noiseH, canvasOffset, drawX, drawY, maxDrops, viewTerm, lineNum, txtEntry,
     fillTxt, eraseTxt, typeTxt, linesToRun, lineToType, charToType, currentChar,
-    rectAng, rectW, rectH, numFieldFrame, frameDrawTime, fieldRepetitions;
+    rectAng, rectW, rectH, numFieldFrame, frameDrawTime, fieldRepetitions,
+    summaryP, colour00, colour01, colour02, colour03, colour04, colour05,
+    colour06, colour07, colour08, colour09, colour10, glitchAnim, styleStatus;
 
 window.onload = function() {
     view    = document.getElementById("view");
@@ -11,16 +13,20 @@ window.onload = function() {
     noiseCtx = noise.getContext("2d");
     noiseUnit = 5;
 
+    glitch = document.getElementById("glitch");
+    glitchCtx = glitch.getContext("2d");
+
     canvasOffset = 20;
     maxDrops = 50;
-    lineNum = 0;
 
     frameDrawTime = 1500;
-    fieldRepetitions = 0;
+    styleStatus = 0;
 
-    // terminal phase
-    viewTerm = document.getElementById("view-terminal");
-    txtEntry = document.getElementById("text-entry");
+    // set glitch colours
+    colour00 = "#97d07b";
+    colour01 = "#9bd87d";
+    colour02 = "#92c579";
+    colour03 = "#020d12";
 
     // set widths
     viewW  = document.documentElement.clientWidth;
@@ -40,10 +46,63 @@ window.onload = function() {
     noise.style.left = -1 * canvasOffset + "px";
     noise.style.top  = -1 * canvasOffset + "px";
 
+    // set width and position of canvas = glitch
+    glitch.width  = noiseW;
+    glitch.height = noiseH;
+    glitch.style.left = -1 * canvasOffset + "px";
+    glitch.style.top  = -1 * canvasOffset + "px";
+
     // set frame rate and draw
     fps = 24;
     setInterval(draw, 1000/fps);
+    init();
+}
+
+function init() {
+    var createTerm = document.createElement("div");
+    var createTxtEntry = document.createElement("p");
+
+    createTerm.id = "view-terminal";
+    createTxtEntry.id = "text-entry";
+
+    document.body.appendChild(createTerm);
+    createTerm.appendChild(createTxtEntry).innerText = "> ";
+
+    // terminal phase
+    viewTerm = document.getElementById("view-terminal");
+    txtEntry = document.getElementById("text-entry");
+
+    lineNum = 0;
+    fieldRepetitions = 0;
+
     write();
+}
+
+// glitch transtion for between phases
+function glitchTrans() {
+    clearCanvas(glitchCtx, 0, 0, noiseW, noiseH);
+
+    for (var i = 0; i < 20; i++) {
+        var w = getNum(700);
+        var h = getNum(700);
+        var x = getNum(noiseW);
+        var y = getNum(noiseH);
+        var getColour = getNum(5);
+
+        if (getColour == 0) {
+            var colour = colour00;
+        } else if (getColour == 1) {
+            var colour = colour01;
+        } else if (getColour == 2) {
+            var colour = colour02;
+        } else if (getColour == 3) {
+            var colour = colour03;
+        } else if (getColour == 4) {
+            var colour = colour04;
+        }
+
+        drawFillRect(glitchCtx, colour, x, y, w, h)
+    }
 }
 
 // text writing
@@ -85,9 +144,13 @@ function returnLine() {
     viewTerm.appendChild(addLine).innerText = lineToType;
     txtEntry.innerText = "> "
 
+    // prep for next phase
+    summaryP = document.createElement("div");
+    summaryP.id = "short-p";
+    document.body.appendChild(summaryP);
+
     setTimeout(eraseTxtLines, 4000);
     setTimeout(drawField, 8000);
-    setTimeout(removeViewTerm, 10000)
 }
 
 function typeLine(line) {
@@ -97,7 +160,6 @@ function typeLine(line) {
     console.log("type: (" + charToType + ") " + lineToType);
     typeTxt = setInterval(typeChar, 1000/fps, currentChar);
 }
-
 
 function typeChar() {
     var lineToChange;
@@ -154,14 +216,26 @@ function eraseLine(newTxt) {
     if (lineNum + 1 == lineToType) {
         clearTimeout(eraseTxt);
     }
+
+    // initiate glitch transition
+    if (lineToType == lineNum) {
+        glitchAnim = setInterval(glitchTrans, 1000/fps);
+    }
 }
 
 function removeViewTerm() {
     viewTerm.remove();
 }
 
+function removeGlitchAnim() {
+    clearInterval(glitchAnim);
+    clearCanvas(glitchCtx, 0, 0, noiseW, noiseH);
+}
+
 // rectangle field
 function drawField() {
+    setTimeout(removeGlitchAnim, 200);
+    setTimeout(removeViewTerm, 200);
     clearCanvas(viewCtx, 0, 0, viewW, viewH);
     var xOffSet = 0;
     var yOffSet = 0;
@@ -175,8 +249,38 @@ function drawField() {
     viewCtx.translate(viewW/2, viewH/2);
     numFieldFrame = 0;
 
+    // adding lines of text
+    if (fieldRepetitions == 0) {
+        // flip style
+        changeDocStyle();
+    } else if (fieldRepetitions == 2) {
+        var p = document.createElement("p");
+        p.innerText = "120gsm textured Fabriano";
+        summaryP.appendChild(p);
+    } else if (fieldRepetitions == 3) {
+        var p = document.createElement("p");
+        p.innerText = "small off white bumps";
+        summaryP.appendChild(p);
+    } else if (fieldRepetitions == 4) {
+        var p = document.createElement("p");
+        p.innerText = "reflect light";
+        summaryP.appendChild(p);
+    } else if (fieldRepetitions == 5) {
+        var p = document.createElement("p");
+        p.innerText = "I can see it in my head";
+        summaryP.appendChild(p);
+        // these marks are wrong
+    } else if (fieldRepetitions == 6) {
+        var p = document.createElement("p");
+        p.innerText = "roots tighten around me";
+        summaryP.appendChild(p);
+    } else if (fieldRepetitions == 7) {
+        var p = document.createElement("p");
+        p.innerText = "these marks are wrong";
+        summaryP.appendChild(p);
+    }
+
     setTimeout(nextFieldFrame, frameDrawTime, xOffSet, yOffSet, angIncrement);
-    // setTimeout(nextFieldFrame, frameDrawTime);
 }
 
 function nextFieldFrame(xOffSet, yOffSet, angIncrement) {
@@ -186,12 +290,15 @@ function nextFieldFrame(xOffSet, yOffSet, angIncrement) {
     }
 
     if (numFieldFrame == 7) {
-        if (fieldRepetitions != 6) {
+        if (fieldRepetitions != 7) {
             ++fieldRepetitions;
             drawField();
+        } else {
+            // end field phase
+            endFieldPhase();
         }
     } else {
-        drawRect(xOffSet, yOffSet);
+        drawStrokeRect(viewCtx, colour00, xOffSet, yOffSet);
         xOffSet -= 20;
         yOffSet -= 10;
         rectW -= ((rectW * 10) / 100);
@@ -199,15 +306,18 @@ function nextFieldFrame(xOffSet, yOffSet, angIncrement) {
         ++numFieldFrame;
         setTimeout(nextFieldFrame, frameDrawTime, xOffSet, yOffSet, angIncrement);
     }
-
 }
 
-function drawRect(xOff, yOff) {
-    viewCtx.beginPath();
-    viewCtx.lineWidth = "4";
-    viewCtx.strokeStyle = "#020d12";
-    viewCtx.rect((-rectW / 2 + xOff), (-rectH / 2 + yOff), rectW, rectH);
-    viewCtx.stroke();
+function endFieldPhase() {
+    console.log("end");
+    setTimeout(clearCanvas, 5000, viewCtx, 0, 0, viewW, viewH);
+    setTimeout(removeSummaryP, 6000);
+    setTimeout(changeDocStyle, 6000);
+    setTimeout(init, 10000);
+}
+
+function removeSummaryP() {
+    summaryP.remove();
 }
 
 // digital snow
@@ -244,12 +354,33 @@ function getNum(max) {
     return Math.floor(Math.random()*max);
 }
 
+function drawStrokeRect(ctx, colour, xOff, yOff) {
+    ctx.beginPath();
+    ctx.lineWidth = "4";
+    ctx.strokeStyle = colour;
+    ctx.rect((-rectW / 2 + xOff), (-rectH / 2 + yOff), rectW, rectH);
+    ctx.stroke();
+}
+
+function drawFillRect(ctx, colour, x, y, w, h) {
+    ctx.fillStyle = colour;
+    ctx.fillRect(x, y, w, h);
+}
+
+function changeDocStyle() {
+    if (styleStatus == 0) {
+        document.body.style.backgroundColor = colour03;
+        document.body.style.color = colour00;
+        styleStatus = 1;
+    } else {
+        document.body.style.backgroundColor = colour00;
+        document.body.style.color = colour03;
+        styleStatus = 0;
+    }
+}
+
 // no use now
 function glitchTxt() {
-    var colour00 = "#020d12";
-    var colour01 = "blue";
-    var colour02 = "#945189"
-
     if (getNum(1000) == 2) {
         viewTerm.style.left = getNum(50) + "px";
         viewTerm.style.bottom = getNum(50) + "px";
@@ -277,3 +408,16 @@ function removeLine() {
         viewTerm.removeChild(document.getElementById("line-" + lineNum));
     }
 }
+
+// colour00 = "#020d12";
+// colour01 = "#73f140";
+// colour02 = "#5ff0a0";
+// colour03 = "#97d07b";
+
+// colour01 = "blue";
+// colour02 = "#945189";
+// colour03 = "#1b0c68";
+// colour04 = "#b85700";
+// colour05 = "#5f87a2";
+// colour07 = "#6c001d";
+// colour08 = "#ca976a";
