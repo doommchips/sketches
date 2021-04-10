@@ -1,10 +1,9 @@
 * {padding: 0; margin: 0;}
-/* @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap'); */
 
 body {
     background: black;
     color: white;
-    font-family: 'Space Mono', monospace;
+    font-family: 'Input Mono', monospace;
     font-size: 16px;
     line-height: 1.6em;
     overflow: hidden;
@@ -12,6 +11,38 @@ body {
 
 #main {
     position: absolute;
-    left: 0;
-    top: 0;
+}
+
+#msec, #secs, #mins, #hour {
+    display: inline-block;
+    position: absolute;
+
+    background-color: black;
+    padding: 4px 8px;
+}
+
+#msec {
+    top: 40px;
+    right: 40px;
+}
+
+#secs {
+    bottom: 40px;
+    right: 40px;
+
+    display: none;
+}
+
+#mins {
+    bottom: 40px;
+    left: 40px;
+
+    display: none;
+}
+
+#hour {
+    top: 40px;
+    left: 40px;
+
+    display: none;
 }

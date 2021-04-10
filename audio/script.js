@@ -1,7 +1,7 @@
 let main = document.getElementById("main");
 let ctx = main.getContext("2d");
 let dpi = window.devicePixelRatio;
-let pixelCount = 20;
+let pixelCount = 40;
 let pixelSize = 8;
 let pixelColour = "white";
 let lineColour = "white";
@@ -22,11 +22,9 @@ let lineArr = new Array();
 let audioArr = new Array();
 let viewW = document.documentElement.clientWidth;
 let viewH = document.documentElement.clientHeight;
+viewW = viewW + (viewW / 4);
+viewH = viewH + (viewH / 4);
 let scale = 1;
-// let range = {
-//     xAxis: [0 - (viewW / 2), viewW + (viewW / 2)],
-//     yAxis: [0 - (viewH / 2), viewH + (viewH / 2)],
-// }
 
 // freq a minor scale in 3 octaves
 let audioScale = [
@@ -46,6 +44,8 @@ function init() {
     console.log("start");
     setCanvas(scale);
     // set styles
+    main.style.left = (viewW / 8) * -1 + "px";
+    main.style.top = (viewH / 8) * -1 + "px";
     ctx.fillStyle = pixelColour;
     ctx.lineWidth = pixelSize / 2;
     ctx.strokeStyle = pixelColour;
