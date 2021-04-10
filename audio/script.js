@@ -22,12 +22,10 @@ let lineArr = new Array();
 let audioArr = new Array();
 let viewW = document.documentElement.clientWidth;
 let viewH = document.documentElement.clientHeight;
-viewW = viewW + (viewW / 4);
-viewH = viewH + (viewH / 4);
-let scale = 1;
+let scale = 1.25;
 
-// freq a minor scale in 3 octaves
-let audioScale = [
+// freq A minor scale in 3 octaves
+let usableFreq = [
     65.41, 73.42, 82.41, 87.31, 98.00, 110.00, 123.47,
     130.81, 146.83, 164.81, 174.61, 196.00, 220.00, 246.94,
     261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88
@@ -35,17 +33,15 @@ let audioScale = [
 
 // create web audio api context
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let gainNode = audioCtx.createGain();
 // let synthDelay = audioCtx.createDelay(10.0);
-// let distortion = audioCtx.createWaveShaper();
+let distortion = audioCtx.createWaveShaper();
 
 window.onload = init();
 
 function init() {
-    console.log("start");
     setCanvas(scale);
     // set styles
-    main.style.left = (viewW / 8) * -1 + "px";
-    main.style.top = (viewH / 8) * -1 + "px";
     ctx.fillStyle = pixelColour;
     ctx.lineWidth = pixelSize / 2;
     ctx.strokeStyle = pixelColour;
@@ -70,11 +66,9 @@ function calcGrid(callback) {
             // check if pixel has reached edge of view
             if (coordArr[i].xPos > viewW || coordArr[i].xPos < 0) {
                 coordArr[i].xVel = coordArr[i].xVel * -1;
-                // console.log("bounce");
             }
             if (coordArr[i].yPos > viewH || coordArr[i].yPos < 0) {
                 coordArr[i].yVel = coordArr[i].yVel * -1;
-                // console.log("bounce");
             }
 
             // calculate coords
@@ -113,7 +107,6 @@ function calcGrid(callback) {
     // random chance to create new line
     if (rand(chanceToLive) == 0) {
         createLine();
-        // console.log("line");
     }
 
     callback();
@@ -123,12 +116,14 @@ function reduceLife() {
     lineArr.forEach(function(item, i) {
         if (item.lifespan < 1) {
             // if life span of line is up remove from lineArr
-            // line
             lineArr.splice(i, 1);
-            // sound
+            // stop playing sound
             audioArr[i].sound.stop();
+            // push back into array of usable frequencies
+            // round back to two decimals because some frequencies were showing a large amount of decimal points
+            usableFreq.push(roundTwoDec(audioArr[i].sound.frequency.value));
+            // be sure to remove from array last
             audioArr.splice(i, 1);
-            // console.log("no line");
         } else {
             // reduce life of line
             item.lifespan--;
@@ -165,19 +160,22 @@ function createLine() {
 function createSound(x) {
     // create Oscillator node
     var oscillator = audioCtx.createOscillator();
-    // select random note / freq from array
-    var note = rand(audioScale.length);
+    // random new note / freq
+    var note = usableFreq[rand(usableFreq.length)];
 
     oscillator.type = 'saw';
-    oscillator.frequency.setValueAtTime(audioScale[note], audioCtx.currentTime); // value in hertz
-    // oscillator.buffer = buffers[2];
-    oscillator.connect(audioCtx.destination);
+    oscillator.frequency.setValueAtTime(note, audioCtx.currentTime); // value in hertz
+    gainNode.gain.value = 0.15;
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
     oscillator.start();
 
-    // audioArr.push(oscillator);
+    // push audio object to array
     audioArr.push(Object.create({sound: oscillator, lifespan: x}));
-    console.log(audioScale[note]);
-    console.log(audioArr);
+
+    // remove chosen freq from list of available frequencies
+    usableFreq.splice(usableFreq.indexOf(note), 1);
+    console.log(usableFreq.length);
 }
 
 function drawPixel(i) {
@@ -186,7 +184,6 @@ function drawPixel(i) {
     let y = Math.round(coordArr[i].yPos);
 
     ctx.fillRect(x - (pixelSize / 2), y - (pixelSize / 2), pixelSize, pixelSize);
-    // console.log("drawn: pixel x" + x + " y" + y);
 }
 
 function drawLine(i) {
@@ -199,25 +196,31 @@ function drawLine(i) {
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
-    // console.log("drawn: line");
 }
 
 function setCanvas(ratio) {
-    // set main to w and h ratio of document
-    main.width  = viewW / ratio;
-    main.height = viewH / ratio;
-    // console.log(main.width + "w " + main.height + "h");
+    viewW = viewW * ratio;
+    viewH = viewH * ratio;
+    main.style.left = (viewW * (ratio - 1) / 2) * -1 + "px";
+    main.style.top = (viewH * (ratio - 1) / 2) * -1 + "px";
+
+    main.width  = viewW;
+    main.height = viewH;
 }
 
 function enlargeCanvas(ratio) {
     // set main to w and h of document
     void ctx.scale(ratio, ratio);
-    // console.log(main.width + "w " + main.height + "h");
+}
+
+function roundTwoDec(x) {
+    return Math.round(x * 100) / 100;
 }
 
 function rand(max){
     return Math.floor(Math.random() * max);
 }
+
 function randSign(){
     return Math.round(Math.random()) * 2 - 1;
 }

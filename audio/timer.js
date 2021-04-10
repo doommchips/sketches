@@ -7,10 +7,10 @@ let countHour = document.getElementById("hour");
 
 window.setInterval((function(){
     return function() {
-        time = (Date.now()-start)/10;
-        countMillisecond.innerText = Math.floor(time).toLocaleString(undefined, {minimumIntegerDigits: 2});
+        time = (Date.now()-start)/100;
+        countMillisecond.innerText = Math.floor(time).toLocaleString("en-GB", {minimumIntegerDigits: 3});
         // countSecond.innerText = Math.floor(time / 100).toLocaleString(undefined, {minimumIntegerDigits: 2});
         // countMinute.innerText = Math.floor(time / 6000).toLocaleString(undefined, {minimumIntegerDigits: 2});
         // countHour.innerText = Math.floor(time / 60000).toLocaleString(undefined, {minimumIntegerDigits: 2});
         };
-}()), 10);
+}()), 100);
